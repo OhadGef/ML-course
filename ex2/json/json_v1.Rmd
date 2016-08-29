@@ -1,0 +1,68 @@
+---
+title: "SVC_RealEstateTransactions_2008_CA"
+author: "ohad Gefen & Nadav Gilron"
+date: "April 24, 2016"
+output: html_document
+---
+
+
+
+## Wether in Ramat-gan API.
+
+The Sacramento real estate transactions file is a list of 985 real estate transactions in the Sacramento area reported over a five-day period in 2008, as reported by the Sacramento Bee.
+
+[URL to the JSON API](http://api.openweathermap.org/data/2.5/forecast?q=telaviv,israel&mode=json&appid=b3a9e8c9f737f52e70429833d01ee67c)
+
+## The code 
+
+```{r data}
+
+require(jsonlite)
+
+
+jsondata<-fromJSON("http://api.openweathermap.org/data/2.5/forecast?q=telaviv,israel&mode=json&appid=b3a9e8c9f737f52e70429833d01ee67c")
+names(data)
+head(data)
+summary(data)
+
+```
+
+## plot #1 number of bedroom in the hose: 
+
+```{r pressure}
+hist(data1$beds,col="blue", main = "number of beds")
+```
+
+![](nun_beads.png)
+
+## plot #2 the number of bed roomss per erea: 
+
+```{}
+sp<-ggplot(data1, aes(x=longitude, y=latitude, color=beds)) + geom_point()
+sp<- sp + facet_grid(. ~ state)
+sp+scale_color_gradient2(midpoint=2, low="blue", mid="pink", high="red", space ="Lab" )
+
+```
+![](beds_per_erea.png)
+
+
+
+## plot #3 the map of California state:
+
+```{}
+map <- get_map(location = c(lon = mean(data1$longitude), lat = mean(data1$latitude)), zoom = 10,
+               maptype = "roadmap", scale = 2)
+ggmap(map) +
+    geom_point(data = data1, aes(x = longitude, y = latitude, alpha = 2), size = 3, shape = 20) +
+    guides(fill=FALSE, alpha=FALSE, size=FALSE)
+
+
+```
+
+![](map.png)
+
+
+##summerys of the research:
+
+- most of the people prefer to by 2 bedrooms next to Sacramento city in California.
+
